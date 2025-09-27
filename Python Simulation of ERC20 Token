@@ -1,0 +1,101 @@
+from typing import Dict, List
+import hashlib
+
+class ERC20Token:
+    def __init__(self, name: str, symbol: str, decimals: int, total_supply: int):
+        self.name = name
+        self.symbol = symbol
+        self.decimals = decimals
+        self.total_supply = total_supply
+        self.balances: Dict[str, int] = {}
+        self.allowances: Dict[str, Dict[str, int]] = {}
+        self.owner = "contract_creator"
+        
+        self.balances[self.owner] = total_supply
+        self.transaction_history: List[dict] = []
+    
+    def _add_transaction(self, tx_type: str, from_addr: str, to_addr: str, amount: int):
+        tx = {
+            'type': tx_type,
+            'from': from_addr,
+            'to': to_addr,
+            'amount': amount,
+            'hash': hashlib.sha256(f"{from_addr}{to_addr}{amount}".encode()).hexdigest()[:16]
+        }
+        self.transaction_history.append(tx)
+    
+    def balance_of(self, address: str) -> int:
+        return self.balances.get(address, 0)
+    
+    def transfer(self, from_addr: str, to_addr: str, amount: int) -> bool:
+        if self.balance_of(from_addr) < amount:
+            return False
+        
+        self.balances[from_addr] = self.balances.get(from_addr, 0) - amount
+        self.balances[to_addr] = self.balances.get(to_addr, 0) + amount
+        
+        self._add_transaction('TRANSFER', from_addr, to_addr, amount)
+        return True
+    
+    def approve(self, owner: str, spender: str, amount: int) -> bool:
+        if owner not in self.allowances:
+            self.allowances[owner] = {}
+        self.allowances[owner][spender] = amount
+        self._add_transaction('APPROVAL', owner, spender, amount)
+        return True
+    
+    def allowance(self, owner: str, spender: str) -> int:
+        return self.allowances.get(owner, {}).get(spender, 0)
+    
+    def transfer_from(self, spender: str, from_addr: str, to_addr: str, amount: int) -> bool:
+        if self.allowance(from_addr, spender) < amount:
+            return False
+        if self.balance_of(from_addr) < amount:
+            return False
+        
+        self.allowances[from_addr][spender] -= amount
+        self.balances[from_addr] -= amount
+        self.balances[to_addr] = self.balances.get(to_addr, 0) + amount
+        
+        self._add_transaction('TRANSFER_FROM', from_addr, to_addr, amount)
+        return True
+    
+    def mint(self, to_addr: str, amount: int):
+        if to_addr not in self.balances:
+            self.balances[to_addr] = 0
+        self.balances[to_addr] += amount
+        self.total_supply += amount
+        self._add_transaction('MINT', 'contract', to_addr, amount)
+    
+    def burn(self, from_addr: str, amount: int):
+        if self.balance_of(from_addr) >= amount:
+            self.balances[from_addr] -= amount
+            self.total_supply -= amount
+            self._add_transaction('BURN', from_addr, 'contract', amount)
+
+print("=== ERC20 Token Simulation ===")
+my_token = ERC20Token("MyToken", "MTK", 18, 1000000)
+
+print(f"Initial supply: {my_token.total_supply}")
+print(f"Owner balance: {my_token.balance_of('contract_creator')}")
+
+my_token.transfer('contract_creator', 'user1', 5000)
+my_token.transfer('contract_creator', 'user2', 3000)
+
+print(f"\nAfter transfers:")
+print(f"Owner balance: {my_token.balance_of('contract_creator')}")
+print(f"User1 balance: {my_token.balance_of('user1')}")
+print(f"User2 balance: {my_token.balance_of('user2')}")
+
+my_token.approve('user1', 'delegate', 1000)
+print(f"\nAllowance user1->delegate: {my_token.allowance('user1', 'delegate')}")
+
+my_token.transfer_from('delegate', 'user1', 'user3', 500)
+print(f"After transferFrom:")
+print(f"User1 balance: {my_token.balance_of('user1')}")
+print(f"User3 balance: {my_token.balance_of('user3')}")
+print(f"Remaining allowance: {my_token.allowance('user1', 'delegate')}")
+
+print(f"\nTransaction History:")
+for tx in my_token.transaction_history[-3:]:
+    print(f"{tx['type']}: {tx['from']} -> {tx['to']} ({tx['amount']} tokens)")
