@@ -7,3 +7,15 @@ class TodoList:
         self.filename = filename
         self.tasks = []
         self.load_tasks()
+   def load_tasks(self):
+        """Load tasks from JSON file"""
+        if os.path.exists(self.filename):
+            try:
+                with open(self.filename, 'r') as file:
+                    self.tasks = json.load(file)
+                print(f"✅ Loaded {len(self.tasks)} tasks from {self.filename}")
+            except (json.JSONDecodeError, Exception) as e:
+                print(f"❌ Error loading tasks: {e}")
+                self.tasks = []
+        else:
+            self.tasks = []
