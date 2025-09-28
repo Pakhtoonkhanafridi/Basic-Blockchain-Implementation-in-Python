@@ -1,0 +1,25 @@
+class SmartContractTester:
+    
+    def test_erc20_compliance(self):
+        print("=== ERC20 Compliance Tests ===")
+        
+        token = ERC20Token("TestToken", "TEST", 18, 1000000)
+        
+        assert token.total_supply == 1000000, "Initial supply mismatch"
+        print("✓ Initial supply test passed")
+        
+        assert token.transfer('contract_creator', 'test_user', 100), "Transfer failed"
+        assert token.balance_of('test_user') == 100, "Balance update failed"
+        print("✓ Transfer test passed")
+        
+        assert not token.transfer('test_user', 'another_user', 200), "Overflow transfer should fail"
+        print("✓ Insufficient balance test passed")
+        
+        token.approve('test_user', 'spender', 50)
+        assert token.allowance('test_user', 'spender') == 50, "Allowance set failed"
+        print("✓ Allowance test passed")
+        
+        print("All ERC20 compliance tests passed! 🎉")
+
+tester = SmartContractTester()
+tester.test_erc20_compliance()
