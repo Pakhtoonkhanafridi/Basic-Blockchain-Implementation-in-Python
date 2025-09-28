@@ -1,0 +1,9 @@
+import json
+import os
+from datetime import datetime
+
+class TodoList:
+    def __init__(self, filename="todo_data.json"):
+        self.filename = filename
+        self.tasks = []
+        self.load_tasks()
