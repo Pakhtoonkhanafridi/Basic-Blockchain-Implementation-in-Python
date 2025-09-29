@@ -62,4 +62,16 @@ class TodoList:
             if task["completed"]:
                 print(f"    🎯 Completed: {task['completed_at']}")
             print()
-            
+        def complete_task(self, task_id):
+        """Mark a task as completed"""
+        for task in self.tasks:
+            if task["id"] == task_id:
+                if not task["completed"]:
+                    task["completed"] = True
+                    task["completed_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    self.save_tasks()
+                    print(f"🎉 Task {task_id} completed! Great job! 🎉")
+                else:
+                    print(f"ℹ️ Task {task_id} is already completed!")
+                return
+        print(f"❌ Task {task_id} not found!")    
