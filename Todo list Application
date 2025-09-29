@@ -51,8 +51,15 @@ class TodoList:
         print("\n" + "="*60)
         print("📋 YOUR TO-DO LIST")
         print("="*60)
+         
         
         for task in filtered_tasks:
             status = "✅" if task["completed"] else "⏳"
             priority_icon = {"High": "🔴", "Medium": "🟡", "Low": "🟢"}.get(task["priority"], "⚪")
+        print(f"{task['id']:2d}. {status} {priority_icon} {task['description']}")
+            print(f"    📁 Category: {task['category']}")
+            print(f"    📅 Created: {task['created_at']}")
+            if task["completed"]:
+                print(f"    🎯 Completed: {task['completed_at']}")
+            print()
             
