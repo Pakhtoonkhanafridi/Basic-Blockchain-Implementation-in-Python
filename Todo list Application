@@ -75,3 +75,18 @@ class TodoList:
                     print(f"ℹ️ Task {task_id} is already completed!")
                 return
         print(f"❌ Task {task_id} not found!")    
+        def update_task(self, task_id, new_description=None, new_priority=None, new_category=None):
+        """Update task details"""
+        for task in self.tasks:
+            if task["id"] == task_id:
+                if new_description:
+                    task["description"] = new_description
+                if new_priority:
+                    task["priority"] = new_priority
+                if new_category:
+                    task["category"] = new_category
+                
+                self.save_tasks()
+                print(f"✏️ Task {task_id} updated successfully!")
+                return
+        print(f"❌ Task {task_id} not found!")
