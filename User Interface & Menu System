@@ -22,3 +22,119 @@ def get_user_choice():
     except ValueError:
         print("❌ Please enter a valid number!")
         return None
+
+def add_task_interaction(todo_list):
+    """Handle task addition with user input"""
+    print("\n➕ ADD NEW TASK")
+    description = input("Enter task description: ").strip()
+    
+    if not description:
+        print("❌ Task description cannot be empty!")
+        return
+    
+    print("\nSelect priority:")
+    print("1. 🔴 High")
+    print("2. 🟡 Medium")
+    print("3. 🟢 Low")
+    
+    priority_choice = input("Enter priority (1-3, default 2): ").strip()
+    priority_map = {"1": "High", "2": "Medium", "3": "Low"}
+    priority = priority_map.get(priority_choice, "Medium")
+    
+    category = input("Enter category (default: General): ").strip() or "General"
+    
+    todo_list.add_task(description, priority, category)
+
+def main():
+    """Main program loop"""
+    todo_list = TodoList()
+    
+    print("🚀 Welcome to your Smart To-Do List!")
+    print("💡 Your tasks are automatically saved to 'todo_data.json'")
+    
+    while True:
+        display_menu()
+        choice = get_user_choice()
+        
+        if choice == 1:
+            # View tasks with filters
+            print("\n📋 VIEW TASKS")
+            show_completed = input("Show completed tasks? (y/n, default y): ").lower() != 'n'
+            category_filter = input("Filter by category (press enter for all): ").strip()
+            category_filter = category_filter if category_filter else None
+            todo_list.view_tasks(show_completed, category_filter)
+        
+        elif choice == 2:
+            add_task_interaction(todo_list)
+        
+        elif choice == 3:
+            # Complete task
+            todo_list.view_tasks(show_completed=False)
+            try:
+                task_id = int(input("\nEnter task ID to complete: "))
+                todo_list.complete_task(task_id)
+            except ValueError:
+                print("❌ Please enter a valid task ID!")
+        
+        elif choice == 4:
+            # Update task
+            todo_list.view_tasks()
+            try:
+                task_id = int(input("\nEnter task ID to update: "))
+                new_desc = input("New description (press enter to keep current): ").strip()
+                new_desc = new_desc if new_desc else None
+                
+                print("Select new priority:")
+                print("1. 🔴 High | 2. 🟡 Medium | 3. 🟢 Low")
+                priority_choice = input("Enter priority (press enter to keep current): ").strip()
+                priority_map = {"1": "High", "2": "Medium", "3": "Low"}
+                new_priority = priority_map.get(priority_choice) if priority_choice else None
+                
+                new_category = input("New category (press enter to keep current): ").strip()
+                new_category = new_category if new_category else None
+                
+                todo_list.update_task(task_id, new_desc, new_priority, new_category)
+            except ValueError:
+                print("❌ Please enter a valid task ID!")
+        
+        elif choice == 5:
+            # Delete task
+            todo_list.view_tasks()
+            try:
+                task_id = int(input("\nEnter task ID to delete: "))
+                confirm = input("Are you sure? (y/n): ").lower()
+                if confirm == 'y':
+                    todo_list.delete_task(task_id)
+                else:
+                    print("Deletion cancelled.")
+            except ValueError:
+                print("❌ Please enter a valid task ID!")
+        
+        elif choice == 6:
+            # Search tasks
+            keyword = input("\nEnter keyword to search: ").strip()
+            if keyword:
+                todo_list.search_tasks(keyword)
+            else:
+                print("❌ Please enter a search keyword!")
+        
+        elif choice == 7:
+            # Show statistics
+            todo_list.get_statistics()
+        
+        elif choice == 8:
+            # Manual save
+            todo_list.save_tasks()
+        
+        elif choice == 9:
+            # Exit
+            print("\n👋 Thank you for using the To-Do List Manager!")
+            print("💾 Your tasks have been automatically saved.")
+            break
+        
+        else:
+            print("❌ Invalid choice! Please select 1-9.")
+
+# Run the application
+if __name__ == "__main__":
+    main()
