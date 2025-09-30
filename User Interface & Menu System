@@ -13,3 +13,12 @@ def display_menu():
     print("8. 💾 Save Tasks")
     print("9. 🚪 Exit")
     print("="*50)
+
+def get_user_choice():
+    """Get and validate user menu choice"""
+    try:
+        choice = int(input("Enter your choice (1-9): "))
+        return choice
+    except ValueError:
+        print("❌ Please enter a valid number!")
+        return None
