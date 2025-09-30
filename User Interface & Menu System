@@ -1,0 +1,15 @@
+def display_menu():
+    """Display the main menu"""
+    print("\n" + "="*50)
+    print("🎯 TO-DO LIST MANAGER")
+    print("="*50)
+    print("1. 📋 View All Tasks")
+    print("2. ➕ Add New Task")
+    print("3. ✅ Complete Task")
+    print("4. ✏️ Update Task")
+    print("5. ❌ Delete Task")
+    print("6. 🔍 Search Tasks")
+    print("7. 📊 Show Statistics")
+    print("8. 💾 Save Tasks")
+    print("9. 🚪 Exit")
+    print("="*50)
