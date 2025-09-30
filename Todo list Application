@@ -7,7 +7,8 @@ class TodoList:
         self.filename = filename
         self.tasks = []
         self.load_tasks()
-   def load_tasks(self):
+    
+    def load_tasks(self):
         """Load tasks from JSON file"""
         if os.path.exists(self.filename):
             try:
@@ -19,8 +20,8 @@ class TodoList:
                 self.tasks = []
         else:
             self.tasks = []
-
-   def save_tasks(self):
+    
+    def save_tasks(self):
         """Save tasks to JSON file"""
         try:
             with open(self.filename, 'w') as file:
@@ -28,7 +29,23 @@ class TodoList:
             print("💾 Tasks saved successfully!")
         except Exception as e:
             print(f"❌ Error saving tasks: {e}")
-   def view_tasks(self, show_completed=True, category_filter=None):
+    
+    def add_task(self, description, priority="Medium", category="General"):
+        """Add a new task to the list"""
+        task = {
+            "id": len(self.tasks) + 1,
+            "description": description,
+            "priority": priority,
+            "category": category,
+            "completed": False,
+            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "completed_at": None
+        }
+        self.tasks.append(task)
+        self.save_tasks()
+        print(f"✅ Task added: {description}")
+    
+    def view_tasks(self, show_completed=True, category_filter=None):
         """Display all tasks with filtering options"""
         if not self.tasks:
             print("📝 No tasks in your to-do list!")
@@ -51,18 +68,19 @@ class TodoList:
         print("\n" + "="*60)
         print("📋 YOUR TO-DO LIST")
         print("="*60)
-         
         
         for task in filtered_tasks:
             status = "✅" if task["completed"] else "⏳"
             priority_icon = {"High": "🔴", "Medium": "🟡", "Low": "🟢"}.get(task["priority"], "⚪")
-        print(f"{task['id']:2d}. {status} {priority_icon} {task['description']}")
+            
+            print(f"{task['id']:2d}. {status} {priority_icon} {task['description']}")
             print(f"    📁 Category: {task['category']}")
             print(f"    📅 Created: {task['created_at']}")
             if task["completed"]:
                 print(f"    🎯 Completed: {task['completed_at']}")
             print()
-        def complete_task(self, task_id):
+    
+    def complete_task(self, task_id):
         """Mark a task as completed"""
         for task in self.tasks:
             if task["id"] == task_id:
@@ -74,8 +92,9 @@ class TodoList:
                 else:
                     print(f"ℹ️ Task {task_id} is already completed!")
                 return
-        print(f"❌ Task {task_id} not found!")    
-        def update_task(self, task_id, new_description=None, new_priority=None, new_category=None):
+        print(f"❌ Task {task_id} not found!")
+    
+    def update_task(self, task_id, new_description=None, new_priority=None, new_category=None):
         """Update task details"""
         for task in self.tasks:
             if task["id"] == task_id:
@@ -90,3 +109,63 @@ class TodoList:
                 print(f"✏️ Task {task_id} updated successfully!")
                 return
         print(f"❌ Task {task_id} not found!")
+    
+    def delete_task(self, task_id):
+        """Delete a task from the list"""
+        for i, task in enumerate(self.tasks):
+            if task["id"] == task_id:
+                deleted_task = self.tasks.pop(i)
+                # Reassign IDs to maintain order
+                for j, task in enumerate(self.tasks[i:], start=i):
+                    task["id"] = j + 1
+                
+                self.save_tasks()
+                print(f"🗑️ Task '{deleted_task['description']}' deleted!")
+                return
+        print(f"❌ Task {task_id} not found!")
+    
+    def search_tasks(self, keyword):
+        """Search tasks by keyword in description"""
+        found_tasks = [task for task in self.tasks if keyword.lower() in task["description"].lower()]
+        
+        if found_tasks:
+            print(f"\n🔍 Found {len(found_tasks)} tasks matching '{keyword}':")
+            for task in found_tasks:
+                status = "✅" if task["completed"] else "⏳"
+                print(f"  {task['id']}. {status} {task['description']}")
+        else:
+            print(f"🔍 No tasks found matching '{keyword}'")
+    
+    def get_statistics(self):
+        """Display task statistics"""
+        if not self.tasks:
+            print("📊 No tasks to analyze!")
+            return
+        
+        total_tasks = len(self.tasks)
+        completed_tasks = len([task for task in self.tasks if task["completed"]])
+        pending_tasks = total_tasks - completed_tasks
+        
+        # Priority breakdown
+        high_priority = len([task for task in self.tasks if task["priority"] == "High"])
+        medium_priority = len([task for task in self.tasks if task["priority"] == "Medium"])
+        low_priority = len([task for task in self.tasks if task["priority"] == "Low"])
+        
+        # Category breakdown
+        categories = {}
+        for task in self.tasks:
+            categories[task["category"]] = categories.get(task["category"], 0) + 1
+        
+        print("\n" + "="*40)
+        print("📊 TASK STATISTICS")
+        print("="*40)
+        print(f"📈 Total Tasks: {total_tasks}")
+        print(f"✅ Completed: {completed_tasks} ({completed_tasks/total_tasks*100:.1f}%)")
+        print(f"⏳ Pending: {pending_tasks} ({pending_tasks/total_tasks*100:.1f}%)")
+        print(f"\n🎯 Priority Breakdown:")
+        print(f"   🔴 High: {high_priority}")
+        print(f"   🟡 Medium: {medium_priority}")
+        print(f"   🟢 Low: {low_priority}")
+        print(f"\n📁 Categories:")
+        for category, count in categories.items():
+            print(f"   {category}: {count} tasks")
