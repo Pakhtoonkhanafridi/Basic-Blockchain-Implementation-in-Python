@@ -1,2 +1,5 @@
 def create_sample_data():
     """Create sample tasks for testing"""
+     sample_tasks = [
+        {"id": 1, "description": "Learn Python programming", "priority": "High", "category": "Education", "completed": True, "created_at": "2024-01-01 10:00:00", "completed_at": "2024-01-15 14:30:00"},
+        {"id": 2, "description": "Buy groceries", "priority": "Medium", "category": "Personal", "completed": False, "created_at": "2024-01-20 09:15:00", "completed_at": None},
