@@ -1,0 +1,2 @@
+def create_sample_data():
+    """Create sample tasks for testing"""
