@@ -2,3 +2,10 @@ import random
 import json
 import os
 from datetime import datetime
+class NumberGuessingGame:
+    def __init__(self):
+        self.high_scores_file = "high_scores.json"
+        self.high_scores = self.load_high_scores()
+        self.current_score = 0
+        self.games_played = 0
+        self.games_won = 0
