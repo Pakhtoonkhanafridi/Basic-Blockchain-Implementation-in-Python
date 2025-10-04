@@ -9,7 +9,7 @@ class NumberGuessingGame:
         self.current_score = 0
         self.games_played = 0
         self.games_won = 0
-   def load_high_scores(self):
+    def load_high_scores(self):
         """Load high scores from JSON file"""
         if os.path.exists(self.high_scores_file):
             try:
@@ -17,4 +17,11 @@ class NumberGuessingGame:
                     return json.load(file)
             except (json.JSONDecodeError, Exception):
                 return {}
-        return {}
+         return {}
+    def save_high_scores(self):
+        """Save high scores to JSON file"""
+        try:
+            with open(self.high_scores_file, 'w') as file:
+                json.dump(self.high_scores, file, indent=2)
+        except Exception as e:
+            print(f"❌ Error saving high scores: {e}")
