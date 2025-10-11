@@ -20,3 +20,12 @@ class NumberGuessingGame:
             except (json.JSONDecodeError, Exception):
                 return {}
         return {}
+
+      
+    def save_high_scores(self):
+        """Save high scores to JSON file"""
+        try:
+            with open(self.high_scores_file, 'w') as file:
+                json.dump(self.high_scores, file, indent=2)
+        except Exception as e:
+            print(f"❌ Error saving high scores: {e}")
