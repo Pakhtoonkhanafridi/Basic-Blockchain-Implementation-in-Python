@@ -41,3 +41,21 @@ class NumberGuessingGame:
         print("• I'll give you hints along the way")
         print("• Lower attempts = Higher score!")
         print("🎯" * 20)
+
+    def choose_difficulty(self):
+        """Let player choose difficulty level"""
+        print("\n🎮 DIFFICULTY LEVELS:")
+        print("1. 🟢 Easy (1-50, unlimited attempts)")
+        print("2. 🟡 Medium (1-100, 10 attempts)")
+        print("3. 🔴 Hard (1-200, 7 attempts)")
+        print("4. 💀 Expert (1-500, 5 attempts)")
+        
+        while True:
+            try:
+                choice = int(input("\nChoose difficulty (1-4): "))
+                if 1 <= choice <= 4:
+                    return choice
+                else:
+                    print("❌ Please enter 1, 2, 3, or 4")
+            except ValueError:
+                print("❌ Please enter a valid number!")
