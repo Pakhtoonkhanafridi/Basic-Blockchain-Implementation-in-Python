@@ -68,3 +68,17 @@ class NumberGuessingGame:
             4: {"range": (1, 500), "max_attempts": 5, "multiplier": 5.0}
         }
         return settings[difficulty]
+     def calculate_score(self, attempts, max_attempts, multiplier, number_range):
+        """Calculate score based on performance"""
+        base_score = 1000
+        range_factor = (number_range[1] - number_range[0]) / 100
+        
+        if max_attempts == float('inf'):
+            # Easy mode - score decreases with attempts
+            score = base_score - (attempts * 10)
+        else:
+            # Other modes - score based on remaining attempts
+            remaining_attempts = max_attempts - attempts + 1
+            score = (base_score * remaining_attempts / max_attempts) * range_factor
+        
+        return max(0, int(score * multiplier))
