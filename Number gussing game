@@ -29,3 +29,15 @@ class NumberGuessingGame:
                 json.dump(self.high_scores, file, indent=2)
         except Exception as e:
             print(f"❌ Error saving high scores: {e}")
+
+    def display_welcome(self):
+        """Display welcome message and rules"""
+        print("🎯" * 20)
+        print("      NUMBER GUESSING GAME")
+        print("🎯" * 20)
+        print("\n📖 HOW TO PLAY:")
+        print("• I'll think of a number between 1-100")
+        print("• You try to guess it in as few attempts as possible")
+        print("• I'll give you hints along the way")
+        print("• Lower attempts = Higher score!")
+        print("🎯" * 20)
