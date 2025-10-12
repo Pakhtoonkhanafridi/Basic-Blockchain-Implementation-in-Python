@@ -59,3 +59,12 @@ class NumberGuessingGame:
                     print("❌ Please enter 1, 2, 3, or 4")
             except ValueError:
                 print("❌ Please enter a valid number!")
+    def get_game_settings(self, difficulty):
+        """Return game settings based on difficulty"""
+        settings = {
+            1: {"range": (1, 50), "max_attempts": float('inf'), "multiplier": 1.0},
+            2: {"range": (1, 100), "max_attempts": 10, "multiplier": 2.0},
+            3: {"range": (1, 200), "max_attempts": 7, "multiplier": 3.0},
+            4: {"range": (1, 500), "max_attempts": 5, "multiplier": 5.0}
+        }
+        return settings[difficulty]
