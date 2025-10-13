@@ -9,8 +9,8 @@ class NumberGuessingGame:
         self.high_scores = self.load_high_scores()
         self.current_score = 0
         self.games_played = 0
-        self.games_won = 0 
-
+        self.games_won = 0
+        
     def load_high_scores(self):
         """Load high scores from JSON file"""
         if os.path.exists(self.high_scores_file):
@@ -20,8 +20,7 @@ class NumberGuessingGame:
             except (json.JSONDecodeError, Exception):
                 return {}
         return {}
-
-      
+    
     def save_high_scores(self):
         """Save high scores to JSON file"""
         try:
@@ -29,7 +28,7 @@ class NumberGuessingGame:
                 json.dump(self.high_scores, file, indent=2)
         except Exception as e:
             print(f"❌ Error saving high scores: {e}")
-
+    
     def display_welcome(self):
         """Display welcome message and rules"""
         print("🎯" * 20)
@@ -41,7 +40,7 @@ class NumberGuessingGame:
         print("• I'll give you hints along the way")
         print("• Lower attempts = Higher score!")
         print("🎯" * 20)
-
+    
     def choose_difficulty(self):
         """Let player choose difficulty level"""
         print("\n🎮 DIFFICULTY LEVELS:")
@@ -59,6 +58,7 @@ class NumberGuessingGame:
                     print("❌ Please enter 1, 2, 3, or 4")
             except ValueError:
                 print("❌ Please enter a valid number!")
+    
     def get_game_settings(self, difficulty):
         """Return game settings based on difficulty"""
         settings = {
@@ -68,7 +68,8 @@ class NumberGuessingGame:
             4: {"range": (1, 500), "max_attempts": 5, "multiplier": 5.0}
         }
         return settings[difficulty]
-     def calculate_score(self, attempts, max_attempts, multiplier, number_range):
+    
+    def calculate_score(self, attempts, max_attempts, multiplier, number_range):
         """Calculate score based on performance"""
         base_score = 1000
         range_factor = (number_range[1] - number_range[0]) / 100
@@ -82,8 +83,8 @@ class NumberGuessingGame:
             score = (base_score * remaining_attempts / max_attempts) * range_factor
         
         return max(0, int(score * multiplier))
-
-   def get_smart_hint(self, guess, secret_number, attempts, max_attempts):
+    
+    def get_smart_hint(self, guess, secret_number, attempts, max_attempts):
         """Provide intelligent hints based on player's guess"""
         difference = abs(guess - secret_number)
         
@@ -165,8 +166,8 @@ class NumberGuessingGame:
                 if attempts % 2 == 0 or attempts <= 2:
                     hint = self.get_smart_hint(guess, secret_number, attempts, max_attempts)
                     print(hint)
-
-            def update_high_scores(self, player_name, score, difficulty):
+    
+    def update_high_scores(self, player_name, score, difficulty):
         """Update high scores for the difficulty level"""
         difficulty_names = {1: "Easy", 2: "Medium", 3: "Hard", 4: "Expert"}
         diff_name = difficulty_names[difficulty]
@@ -188,7 +189,7 @@ class NumberGuessingGame:
         self.high_scores[diff_name] = self.high_scores[diff_name][:5]
         
         self.save_high_scores()
-
+    
     def display_high_scores(self):
         """Display high scores for all difficulties"""
         print("\n🏆 HIGH SCORES")
@@ -209,3 +210,16 @@ class NumberGuessingGame:
             for i, score_entry in enumerate(scores, 1):
                 print(f"{i}. {score_entry['player']}: {score_entry['score']} pts")
                 print(f"   📅 {score_entry['date']}")
+    
+    def display_stats(self):
+        """Display player statistics"""
+        print("\n📊 YOUR STATISTICS")
+        print("=" * 30)
+        print(f"🎮 Games Played: {self.games_played}")
+        if self.games_played > 0:
+            win_rate = (self.games_won / self.games_played) * 100
+            print(f"✅ Games Won: {self.games_won}")
+            print(f"📈 Win Rate: {win_rate:.1f}%")
+            print(f"⭐ Current Score: {self.current_score}")
+        else:
+            print("No games played yet!")
