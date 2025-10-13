@@ -188,3 +188,24 @@ class NumberGuessingGame:
         self.high_scores[diff_name] = self.high_scores[diff_name][:5]
         
         self.save_high_scores()
+
+    def display_high_scores(self):
+        """Display high scores for all difficulties"""
+        print("\n🏆 HIGH SCORES")
+        print("=" * 40)
+        
+        if not self.high_scores:
+            print("No high scores yet. Be the first!")
+            return
+        
+        for difficulty, scores in self.high_scores.items():
+            print(f"\n🎯 {difficulty.upper()} MODE:")
+            print("-" * 30)
+            
+            if not scores:
+                print("No scores yet")
+                continue
+                
+            for i, score_entry in enumerate(scores, 1):
+                print(f"{i}. {score_entry['player']}: {score_entry['score']} pts")
+                print(f"   📅 {score_entry['date']}")
