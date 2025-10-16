@@ -28,7 +28,7 @@ class NumberGuessingGame:
             print(f"❌ Error saving high scores: {e}")
     
     def display_welcome(self):
-        """Display welcome message and rules"""
+        """Display welcome message and rules of """
         print("🎯" * 20)
         print("      NUMBER GUESSING GAME")
         print("🎯" * 20)
