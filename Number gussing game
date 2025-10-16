@@ -223,3 +223,56 @@ class NumberGuessingGame:
             print(f"⭐ Current Score: {self.current_score}")
         else:
             print("No games played yet!")
+    
+    def play_game(self):
+        """Main game loop"""
+        self.display_welcome()
+        player_name = input("\nEnter your name: ").strip() or "Player"
+        
+        while True:
+            print(f"\n👋 Hello, {player_name}! Ready to play?")
+            print("\n1. 🎮 Play Game")
+            print("2. 🏆 View High Scores")
+            print("3. 📊 View My Stats")
+            print("4. 🚪 Exit")
+            
+            try:
+                choice = int(input("\nChoose option (1-4): "))
+            except ValueError:
+                print("❌ Please enter a valid number!")
+                continue
+            
+            if choice == 1:
+                # Play the game
+                difficulty = self.choose_difficulty()
+                score = self.play_round(difficulty)
+                
+                self.games_played += 1
+                if score > 0:
+                    self.games_won += 1
+                    self.current_score += score
+                    self.update_high_scores(player_name, score, difficulty)
+                
+                # Ask to play again
+                play_again = input("\n🔄 Play again? (y/n): ").lower()
+                if play_again != 'y':
+                    print("\n👋 Thanks for playing! Come back soon!")
+                    break
+            
+            elif choice == 2:
+                self.display_high_scores()
+            
+            elif choice == 3:
+                self.display_stats()
+            
+            elif choice == 4:
+                print("\n👋 Thanks for playing! Goodbye!")
+                break
+            
+            else:
+                print("❌ Invalid choice! Please select 1-4.")
+
+# Run the game
+if __name__ == "__main__":
+    game = NumberGuessingGame()
+    game.play_game()
