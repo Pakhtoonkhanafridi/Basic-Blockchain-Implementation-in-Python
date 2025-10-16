@@ -12,7 +12,6 @@ class NumberGuessingGame:
         self.games_won = 0
         
     def load_high_scores(self):
-        """Load high scores from JSON file"""
         if os.path.exists(self.high_scores_file):
             try:
                 with open(self.high_scores_file, 'r') as file:
@@ -22,7 +21,6 @@ class NumberGuessingGame:
         return {}
     
     def save_high_scores(self):
-        """Save high scores to JSON file"""
         try:
             with open(self.high_scores_file, 'w') as file:
                 json.dump(self.high_scores, file, indent=2)
@@ -60,7 +58,6 @@ class NumberGuessingGame:
                 print("❌ Please enter a valid number!")
     
     def get_game_settings(self, difficulty):
-        """Return game settings based on difficulty"""
         settings = {
             1: {"range": (1, 50), "max_attempts": float('inf'), "multiplier": 1.0},
             2: {"range": (1, 100), "max_attempts": 10, "multiplier": 2.0},
@@ -70,7 +67,6 @@ class NumberGuessingGame:
         return settings[difficulty]
     
     def calculate_score(self, attempts, max_attempts, multiplier, number_range):
-        """Calculate score based on performance"""
         base_score = 1000
         range_factor = (number_range[1] - number_range[0]) / 100
         
@@ -85,7 +81,6 @@ class NumberGuessingGame:
         return max(0, int(score * multiplier))
     
     def get_smart_hint(self, guess, secret_number, attempts, max_attempts):
-        """Provide intelligent hints based on player's guess"""
         difference = abs(guess - secret_number)
         
         if attempts == 1:
@@ -104,7 +99,6 @@ class NumberGuessingGame:
             return "🧊 You're pretty far off"
     
     def play_round(self, difficulty):
-        """Play one round of the game"""
         settings = self.get_game_settings(difficulty)
         low, high = settings["range"]
         max_attempts = settings["max_attempts"]
