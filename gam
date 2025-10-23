@@ -1,0 +1,6 @@
+import random
+
+def simple_number_guessing():
+    """Simple version of the number guessing game"""
+    print("🎯 WELCOME TO NUMBER GUESSING GAME!")
+    print("I'm thinking of a number between 1 and 100!")
