@@ -16,3 +16,7 @@ elif:
    peint("a is greater than b)
 else:
    print("Both are equal")
+
+a =1 
+for a<10:
+ print(a)
