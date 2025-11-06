@@ -15,4 +15,4 @@ if (a<b):
 elif:
    peint("a is greater than b)
 else:
-   print
+   print("Both are equal")
