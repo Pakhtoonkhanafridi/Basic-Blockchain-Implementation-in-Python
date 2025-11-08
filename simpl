@@ -20,3 +20,9 @@ else:
 a =1 
 for a<10:
  print(a)
+a = 8
+for a<10:
+ {
+      print(a)
+}
+
