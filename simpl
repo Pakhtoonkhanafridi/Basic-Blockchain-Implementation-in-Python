@@ -29,3 +29,6 @@ for a<=10:
 #while 
 # DO while
 # for each loop
+  if a=10 & b=11 :
+    print("both are equal")
+    
