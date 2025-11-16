@@ -31,6 +31,10 @@ for a<=10:
 # for each loop
   if a=10 & b=11 :
     print("both are equal")
+while a<=10:
+   print(a)
+ do:
+    i==
 
 else:
    print("both are not equal")
