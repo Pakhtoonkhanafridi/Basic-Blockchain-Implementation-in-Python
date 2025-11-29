@@ -41,3 +41,4 @@ else:
     
 while a<=20; a++:
   print(a)
+print(20+23)
